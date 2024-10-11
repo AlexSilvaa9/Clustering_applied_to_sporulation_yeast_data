@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2024.9.27)  11 OCT 2024 17:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2024.9.27)  11 OCT 2024 17:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -364,7 +364,7 @@ Package hyperref Info: Link coloring OFF on input line 55.
 LaTeX Info: Redefining \. on input line 55.
 LaTeX Info: Redefining \% on input line 55.
 \c@lstlisting=\count293
-<images/uma_logo.jpg, id=12, 965.6075pt x 965.6075pt>
+<images/uma_logo.jpg, id=28, 965.6075pt x 965.6075pt>
 File: images/uma_logo.jpg Graphic file (type jpg)
 <use images/uma_logo.jpg>
 Package pdftex.def Info: images/uma_logo.jpg  used on input line 69.
@@ -416,29 +416,33 @@ Package rerunfilecheck Warning: File `main.out' has changed.
 (rerunfilecheck)                or use package `bookmark'.
 
 Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: E1E935D9F5C115444BE6B12AAE81AE3C;260
-(rerunfilecheck)             After:  1B845C3A4F892B66F625D24F2A0451E1;353.
+(rerunfilecheck)             Before: 0FCCFD241FC48B87B4B65CA7D1BAA3C5;619
+(rerunfilecheck)             After:  83D1151DE20B2F4397EE2A6C8354B33B;526.
  ) 
 Here is how much of TeX's memory you used:
- 11819 strings out of 476091
- 184560 string characters out of 5794081
+ 11826 strings out of 476091
+ 184631 string characters out of 5794081
  1856330 words of memory out of 5000000
- 32049 multiletter control sequences out of 15000+600000
+ 32053 multiletter control sequences out of 15000+600000
  520907 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,5n,76p,1021b,488s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf/
-fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/c
-m-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb
-></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/f
-onts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm
--super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fo
-nts/type1/public/cm-super/sftt1000.pfb>
-Output written on main.pdf (4 pages, 1040270 bytes).
+
+pdfTeX warning (dest): name{section.6} has been referenced but does not exist, 
+replaced by a fixed one
+
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf/fo
+nts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-
+super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb><
+/usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fon
+ts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-s
+uper/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb></
+usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/font
+s/type1/public/cm-super/sftt1000.pfb>
+Output written on main.pdf (4 pages, 1042842 bytes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 66 compressed objects within 1 object stream
- 11 named destinations out of 1000 (max. 500000)
- 22 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 112 PDF objects out of 1000 (max. 8388607)
+ 86 compressed objects within 1 object stream
+ 14 named destinations out of 1000 (max. 500000)
+ 54 words of extra memory for PDF output out of 10000 (max. 10000000)
 
