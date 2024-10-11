@@ -7,6 +7,7 @@
 \usepackage{booktabs}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{hyperref}
 
 \usepackage[spanish]{babel} % Paquete para el idioma español
 \usepackage{float}  % Necesario para [H]
@@ -86,7 +87,16 @@
 \newpage
 
 \section{Introducción}
+The process of \textbf{sporulation in yeast} is a well-established model for studying cellular differentiation and gene regulation. Sporulation involves a series of highly regulated biological stages during which the yeast cell transitions into a spore, primarily in response to nutrient deprivation. Gene expression in yeast during sporulation is characterized by distinct temporal patterns, making it an ideal candidate for clustering analysis. Through clustering, genes with similar expression profiles can be grouped, aiding in the identification of genes that may participate in similar biological functions or regulatory pathways.
 
+With the advent of \textbf{microarray technology}, the ability to measure the expression levels of thousands of genes simultaneously across different time points has significantly advanced. This vast amount of data requires effective computational tools for analysis. One such tool is \textbf{clustering}, which groups genes based on the similarity of their expression profiles. In this context, \textbf{k-Means clustering} has emerged as a widely used technique due to its simplicity and effectiveness. The algorithm attempts to partition genes into
+\emph{k} clusters by minimizing the variance within each cluster, leading to groups of genes that exhibit similar temporal expression patterns during sporulation.
+\\
+
+In this project, we aim to evaluate the performance of \textbf{k-Means clustering on the sporulation dataset} of budding yeast, comparing the results to those presented in \cite{datta2003comparison} by Datta and Datta (2003), which explores various clustering methods including hierarchical clustering and Diana. The primary objective is to assess the effectiveness of k-Means in clustering genes during sporulation, and to analyze how it compares to more complex methods discussed in the literature.
+
+\section{Objectives}
+The main objective of this project is to \textbf{evaluate the performance of the k-Means clustering algorithm} when applied to the sporulation dataset of yeast, which contains gene expression profiles measured across multiple time points. By clustering these genes, the aim is to \textbf{identify groups of genes} that exhibit similar expression patterns throughout the sporulation process. To assess the effectiveness of k-Means, the results will be compared to those obtained in Datta and Datta's (2003) study \cite{datta2003comparison}, which evaluated various clustering techniques, including hierarchical clustering and divisive clustering (Diana). Additionally, metrics such as the silhouette score will be used to quantify the quality of the clustering results. Through this comparison, the project seeks to determine the strengths and limitations of k-Means in clustering biological data and to explore its applicability in gene expression analysis during yeast sporulation.
 	
 \newpage
 \section{Acceso al Repositorio}
