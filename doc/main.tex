@@ -19,7 +19,40 @@
 \definecolor{BG}{HTML}{EEEEEE}
 \definecolor{azul}{HTML}{4D869C}
 \definecolor{sqlblue}{HTML}{FF8C00} % Color para las palabras clave SQL
+\usepackage{listings}
+\usepackage{xcolor}
 
+
+%estilo python
+\usepackage{xcolor}
+
+% Define the colors for the style
+\definecolor{BG}{rgb}{0.95,0.95,0.95}  % Background color
+\definecolor{keywordcolor}{rgb}{0.0,0.0,1.0} % Blue for keywords
+\definecolor{commentcolor}{rgb}{0.0,0.5,0.0} % Green for comments
+\definecolor{stringcolor}{rgb}{1.0,0.0,0.0}  % Red for strings
+\definecolor{attributecolor}{rgb}{0.8,0.3,0.8} % Purple for attributes
+\definecolor{importcolor}{rgb}{0.0,0.6,0.6} % Teal for import statements
+
+% Define the style for Python code
+\lstdefinestyle{mypython}{
+	backgroundcolor=\color{BG},   % Background color
+	basicstyle=\footnotesize\ttfamily,  
+	breaklines=true,                  
+	language=Python,                  
+	keywordstyle=\color{keywordcolor},    
+	commentstyle=\color{commentcolor}, 
+	stringstyle=\color{stringcolor},
+	frame=shadowbox, 
+	morekeywords={model},  % Add 'model' to keywords
+	keywordstyle=[2]\color{importcolor}, % Color for import statements
+	sensitive=true,       % Case sensitive
+	morecomment=[s]{"""}{"} % Allows for multi-line strings
+}
+
+
+
+\lstset{style=mypython}
 % Estilo para DDL
 \lstdefinestyle{ddlstyle}{
 	language=SQL,
@@ -100,6 +133,78 @@ The main objective of this project is to \textbf{evaluate the performance of the
 	
 	
 \section{Methodology and Results}
+
+We begin by preparing the environment for data processing and clustering using the Sporulation Yeast Dataset, which contains gene expression data measured at 7 distinct time points during the sporulation process. \textbf{Each row in the dataset represents a gene}, and the \textbf{columns correspond to the expression levels at different time intervals}. To focus on the relevant data, we exclude the mean and variance rows from the dataset. We designate the gene names as the Y-axis (or labels) and the time points as the X-axis (features), allowing us to analyze how gene expression levels vary over time. This preprocessing step ensures that the data is structured correctly for subsequent clustering analysis.
+\\
+
+The next step is to \textbf{normalize} the gene expression data using Z-score normalization. This method adjusts the values of each gene's expression levels to have a mean of 0 and a standard deviation of 1 across the time points. By doing this, we ensure that the expression data for each gene is comparable, preventing any gene with higher baseline expression levels from dominating the clustering process. 
+\\
+
+Now we employ the Elbow Method to identify the optimal number of clusters, 
+k, for the k-Means algorithm. The Elbow Method is a well-established technique used to determine the appropriate number of clusters by evaluating the within-cluster sum of squares (also known as inertia) for a range of cluster values. 
+\\
+
+\begin{lstlisting}[style=mypython, label=fig:elbow_code,caption=Implementation of Elbow Method to the dataset]
+	 
+	from sklearn.cluster import KMeans
+	from yellowbrick.cluster import KElbowVisualizer
+	
+	model = KMeans()
+	visualizer = KElbowVisualizer(model, k=(2,9)) # a range of k values from 2 to 9
+	
+	visualizer.fit(x)        # Fit the data to the visualizer
+	visualizer.show()        # Finalize and render the figure	
+\end{lstlisting}
+
+
+By using the KElbowVisualizer  we assess the inertia for k values between 2 and 9 as is shown in the listing \ref{fig:elbow_code}.
+The visualizer generates the figure \ref{fig:elbow}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/elbow.png}
+	\caption{Distortion Score Elbow for KMeans Clustering}
+	\label{fig:elbow}
+\end{figure}
+
+
+
+ The 'elbow' in \ref{fig:elbow}, which represents the point where the reduction in inertia starts to slow down, indicates the optimal number of clusters. In this case, the analysis reveals that \textbf{k=4} is the optimal number of clusters, suggesting that partitioning the dataset into 4 clusters strikes a balance between minimizing within-cluster variance and avoiding overfitting. 
+\\
+
+To give more information, \textbf{Principal Component Analysis (PCA)} is applied to the gene expression dataset to reduce its dimensionality from the original high-dimensional space to two dimensions. By creating an instance of the PCA class with n components=2, the code in the listing \ref{fig:pca_code} captures the most significant variance in the data while transforming it into a lower-dimensional representation. 
+\\
+
+\begin{lstlisting}[style=mypython, label=fig:pca_code,caption=Application of PCA method]
+	
+	from sklearn.decomposition import PCA
+	import matplotlib.pyplot as plt
+	import seaborn as sns
+	
+	pca = PCA(n_components=2)
+	x_pca = pca.fit_transform(x)
+	
+	
+	plt.figure(2, figsize=(8, 6))
+	plt.clf()
+	plt.scatter(x_pca[:, 0], x_pca[:, 1], cmap=plt.cm.Set1, edgecolor="k")
+	# plt.scatter(x_pca[:, 0], x_pca[:, 1], c=y, cmap=plt.cm.Set1, edgecolor="k")
+	
+	plt.xlabel("First principal component")
+	plt.ylabel("Second principal component")	
+\end{lstlisting}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/pca.png}
+	\caption{PCA Visualization of Gene Expression Profiles During Sporulation}
+	\label{fig:pca}
+\end{figure}
+
+
+The resulting two principal components are then visualized in \ref{fig:pca} using a scatter plot, where the x-axis represents the first principal component and the y-axis represents the second principal component. This visualization allows for a clearer understanding of the data's structure, revealing potential clusters and relationships among gene expression profiles during the sporulation process. Overall, PCA facilitates a more straightforward interpretation of complex datasets, making it easier to analyze patterns in gene expression.
+\\
+
 
 poner codigo de algunas cosas
 
