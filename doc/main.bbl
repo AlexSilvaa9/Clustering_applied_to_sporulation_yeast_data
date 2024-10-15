@@ -3,16 +3,8 @@
 \bibitem{silva2024github}
 Alex Silva.
 \newblock Practica1\_almacenes\_de\_datos.
-\newblock \path{https://github.com/AlexSilvaa9/Practica1\_almacenes\_de\_datos},
+\newblock \url{https://github.com/AlexSilvaa9/Practica1\_almacenes\_de\_datos},
   2024.
 \newblock Último acceso: 1 octubre 2024.
-
-\bibitem{datta2003comparison}
-Susmita Datta and Somnath Datta.
-\newblock Comparison and validation of statistical clustering techniques for microarray gene expression data.
-\newblock {\em Bioinformatics}, 19(4):459--466, 2003.
-\newblock \path{http://bioinformatics.oxfordjournals.org/content/19/4/459},
-2003.
-
 
 \end{thebibliography}

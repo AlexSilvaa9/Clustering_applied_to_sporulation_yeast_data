@@ -139,7 +139,7 @@ We begin by preparing the environment for data processing and clustering using t
 
 The next step is to \textbf{normalize} the gene expression data using Z-score normalization. This method adjusts the values of each gene's expression levels to have a mean of 0 and a standard deviation of 1 across the time points. By doing this, we ensure that the expression data for each gene is comparable, preventing any gene with higher baseline expression levels from dominating the clustering process. 
 \\
-
+\subsection{Elbow method}
 Now we employ the Elbow Method to identify the optimal number of clusters, 
 k, for the k-Means algorithm. The Elbow Method is a well-established technique used to determine the appropriate number of clusters by evaluating the within-cluster sum of squares (also known as inertia) for a range of cluster values. 
 \\
@@ -162,7 +162,7 @@ The visualizer generates the figure \ref{fig:elbow}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{images/elbow.png}
+	\includegraphics[width=.7\textwidth]{images/elbow.png}
 	\caption{Distortion Score Elbow for KMeans Clustering}
 	\label{fig:elbow}
 \end{figure}
@@ -172,8 +172,10 @@ The visualizer generates the figure \ref{fig:elbow}.
  The 'elbow' in \ref{fig:elbow}, which represents the point where the reduction in inertia starts to slow down, indicates the optimal number of clusters. In this case, the analysis reveals that \textbf{k=4} is the optimal number of clusters, suggesting that partitioning the dataset into 4 clusters strikes a balance between minimizing within-cluster variance and avoiding overfitting. 
 \\
 
-To give more information, \textbf{Principal Component Analysis (PCA)} is applied to the gene expression dataset to reduce its dimensionality from the original high-dimensional space to two dimensions. By creating an instance of the PCA class with n components=2, the code in the listing \ref{fig:pca_code} captures the most significant variance in the data while transforming it into a lower-dimensional representation. 
-\\
+\subsection{Data visualization}
+Principal Component Analysis (PCA) and Multidimensional Scaling (MDS) are dimensionality reduction techniques used to represent data in a lower-dimensional space, making visualization and analysis easier.
+
+\textbf{PCA} is applied to the gene expression dataset to reduce its dimensionality from the original high-dimensional space to two dimensions. By creating an instance of the PCA class with n\_components=2, the code in listing \ref{fig:pca} captures the most significant variance in the data while transforming it into a lower-dimensional representation. In this process, PCA identifies the directions (principal components) that maximize the variance of the data.
 
 \begin{lstlisting}[style=mypython, label=fig:pca_code,caption=Application of PCA method]
 	
@@ -196,16 +198,156 @@ To give more information, \textbf{Principal Component Analysis (PCA)} is applied
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{images/pca.png}
-	\caption{PCA Visualization of Gene Expression Profiles During Sporulation}
-	\label{fig:pca}
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/pca.png}
+		\caption{PCA Visualization of Gene Expression Profiles During Sporulation}
+		\label{fig:pca}
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/mds.png}
+		\caption{MDS Visualization of Gene Expression Profiles During Sporulation}
+		\label{fig:mds}
+	\end{minipage}
 \end{figure}
-
-
-The resulting two principal components are then visualized in \ref{fig:pca} using a scatter plot, where the x-axis represents the first principal component and the y-axis represents the second principal component. This visualization allows for a clearer understanding of the data's structure, revealing potential clusters and relationships among gene expression profiles during the sporulation process. Overall, PCA facilitates a more straightforward interpretation of complex datasets, making it easier to analyze patterns in gene expression.
+The resulting two principal components are visualized in figure \ref{fig:pca} using a scatter plot, where the x-axis represents the first principal component and the y-axis represents the second principal component. This visualization allows for a clearer understanding of the data's structure, revealing potential clusters and relationships among gene expression profiles during the sporulation process. Overall, PCA facilitates a more straightforward interpretation of complex datasets, making it easier to analyze patterns in gene expression.
 \\
 
+On the other hand, \textbf{MDS} is also used for dimensionality reduction and, like PCA, aims to preserve the structure of the data in a lower-dimensional space. MDS starts with a dissimilarity matrix between the data points and seeks a two-dimensional representation that minimizes the differences between the original distances and the distances in the reduced space. This focus on dissimilarities makes MDS particularly advantageous for clustering applications, as it can identify patterns and groupings based on the relationships between data points rather than solely relying on variance, as is the case with PCA.
+\\
 
+Similar to PCA, the resulting visualization in figure \ref{fig:mds} provides valuable insights into the relationship between samples, allowing for the identification of patterns and potential clustering of gene expression profiles during sporulation. Both techniques, PCA and MDS, are complementary and can provide similar information about the underlying structure of the data, assisting in the interpretation of results and the identification of relationships between variables.
+
+\subsection{First aproach to clustering}
+
+To further explore the relationships within the gene expression data, we apply K-means clustering using the MDS-reduced dimensions. Based on the results from the elbow method, we choose k=4 as the optimal number of clusters. The following code snippet demonstrates the implementation of MDS followed by K-means clustering:
+
+\begin{lstlisting}[style=mypython, label=fig:pca_code,caption=Application of PCA method]
+	
+	from sklearn.manifold import MDS
+	from sklearn.cluster import KMeans
+	import matplotlib.pyplot as plt
+	
+	# Aplicar MDS para reducir la dimensionalidad
+	mds = MDS(n_components=2, random_state=42)
+	x_mds = mds.fit_transform(x)
+	
+	# Realizar el clustering con K-means
+	clusterer = KMeans(n_clusters=4, random_state=42)
+	cluster_labels = clusterer.fit_predict(x_mds)
+	
+	# Visualizar los clusters formados
+	plt.figure(figsize=(8, 6))
+	plt.clf()
+	plt.scatter(x_mds[:, 0], x_mds[:, 1], c=cluster_labels, edgecolor="k", cmap=plt.cm.Set1)
+	
+	# Obtener los centros de los clusters
+	centers = clusterer.cluster_centers_
+	
+	# Dibujar circulos rojos en los centros de los clusters
+	plt.scatter(centers[:, 0], centers[:, 1], marker="o", c="red", s=200, edgecolor="k")
+	
+	plt.xlabel("MDS Dimension 1")
+	plt.ylabel("MDS Dimension 2")
+	plt.title("K-means Clustering on MDS Projection")
+	plt.show()
+	
+\end{lstlisting}
+The visualization (Figure \ref{fig:mds_k4}) illustrates the clusters formed by K-means, with different colors representing different clusters. Additionally, the red circles indicate the centers of the clusters, providing insight into the central tendencies of the identified groups. This approach allows for a clearer understanding of how gene expression profiles are organized and related during the sporulation process.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.6\textwidth]{images/mds_k4.png}
+	\caption{Visualization of clustering k=4}
+	\label{fig:mds_k4}
+\end{figure}
+
+Moreover, each cluster is represented against the time variables \ref{lst:violin} to gain a better understanding of how these gene clusters are expressed at different time points.
+
+Violin plots effectively illustrate the distribution of each variable, enabling us to observe variations in central tendency and spread across clusters. This visualization is particularly valuable for interpreting how the characteristics of gene expression profiles differ in relation to the identified clusters over time.
+
+\begin{lstlisting}[style=mypython, caption=Violin Plots of Variables by Cluster, label=lst:violin]
+	import math
+	# Number of variables to plot
+	num_vars = len(df.columns[1:-1])
+	
+	# Calculate rows and columns for the subplots
+	cols = 3  # Number of plots per row
+	rows = math.ceil(num_vars / cols)  # Number of rows needed
+	
+	# Create subplots
+	fig, axes = plt.subplots(rows, cols, figsize=(cols * 6, rows * 4))
+	fig.tight_layout(pad=5.0)  # Spacing between plots
+	
+	# Iterate over the variables and plot them
+	for i, var in enumerate(df.columns[0:-1]):
+	row = i // cols
+	col = i % cols
+	sns.violinplot(x=df['cluster'], y=var, data=df, ax=axes[row, col])
+	axes[row, col].set_title(f'Violin Plot for {var} by Cluster')
+	
+	# Remove empty axes if there are any
+	for i in range(num_vars, rows * cols):
+	fig.delaxes(axes.flat[i])
+	
+	plt.show()
+\end{lstlisting}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/violin.png}
+	\caption{Violin Plots of Variables by Cluster}
+	\label{fig:violin_plots}
+\end{figure}
+
+In the Figure \ref{fig:violin_plots}, it is observed that some gene clusters are expressed coordinately at nearly every time point. This may indicate that these genes belong to the same functional group. Therefore, as seen in the MDS analysis, they might be incorrectly grouped. 
+
+\subsection{Clustering comparation}
+
+In this section, we compare various clustering methods (k-means, agglomerative clustering, and Gaussian mixture models) along with different numbers of clusters. This comparison employs multiple validation techniques to provide a comprehensive understanding of how well these clustering methods perform on the dataset. Additionally, we evaluate our results against findings from relevant literature.
+
+\begin{lstlisting}[style=mypython, caption=Violin Plots of Variables by Cluster, label=lst:violin]
+
+\end{lstlisting}
+
+\begin{figure}[H]
+	\centering
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/clustering_Average Distance Between Clusters.png}
+		\caption{Average Distance Between Clusters}
+		\label{fig:average_distance}
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/clustering_Mean Distance to Centroids.png}
+		\caption{Mean Distance to Centroids}
+		\label{fig:mean_distance}
+	\end{minipage}
+	
+	\vspace{0.5cm} % Espacio vertical entre filas
+	
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/clustering_Non-Overlap Measure.png}
+		\caption{Non-Overlap Measure}
+		\label{fig:non_overlap}
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/clustering_Silhouette Score.png}
+		\caption{Silhouette Score}
+		\label{fig:silhouette_score}
+	\end{minipage}
+	
+	\caption{Comparison of Clustering Methods}
+	\label{fig:clustering_methods}
+\end{figure}
+ como se puede ver sale k=2 y los papers mechupan el pito
+\subsection{Silhouettes}
+
+se ponen las graficas de las siluetas y se intenta cerrar
+\newpage
 poner codigo de algunas cosas
 
 
