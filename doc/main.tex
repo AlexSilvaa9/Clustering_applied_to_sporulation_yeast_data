@@ -174,9 +174,12 @@ The visualizer generates the figure \ref{fig:elbow}.
 
 \subsection{Data visualization}
 Principal Component Analysis (PCA) and Multidimensional Scaling (MDS) are dimensionality reduction techniques used to represent data in a lower-dimensional space, making visualization and analysis easier.
+\\
 
 \textbf{PCA} is applied to the gene expression dataset to reduce its dimensionality from the original high-dimensional space to two dimensions. By creating an instance of the PCA class with n\_components=2, the code in listing \ref{fig:pca} captures the most significant variance in the data while transforming it into a lower-dimensional representation. In this process, PCA identifies the directions (principal components) that maximize the variance of the data.
+\\
 
+On the other hand, \textbf{MDS} is also used for dimensionality reduction and, like PCA, aims to preserve the structure of the data in a lower-dimensional space. MDS starts with a dissimilarity matrix between the data points and seeks a two-dimensional representation that minimizes the differences between the original distances and the distances in the reduced space. This focus on dissimilarities makes MDS particularly advantageous for clustering applications, as it can identify patterns and groupings based on the relationships between data points rather than solely relying on variance, as is the case with PCA.
 \begin{lstlisting}[style=mypython, label=fig:pca_code,caption=Application of PCA method]
 	
 	from sklearn.decomposition import PCA
@@ -212,9 +215,6 @@ Principal Component Analysis (PCA) and Multidimensional Scaling (MDS) are dimens
 	\end{minipage}
 \end{figure}
 The resulting two principal components are visualized in figure \ref{fig:pca} using a scatter plot, where the x-axis represents the first principal component and the y-axis represents the second principal component. This visualization allows for a clearer understanding of the data's structure, revealing potential clusters and relationships among gene expression profiles during the sporulation process. Overall, PCA facilitates a more straightforward interpretation of complex datasets, making it easier to analyze patterns in gene expression.
-\\
-
-On the other hand, \textbf{MDS} is also used for dimensionality reduction and, like PCA, aims to preserve the structure of the data in a lower-dimensional space. MDS starts with a dissimilarity matrix between the data points and seeks a two-dimensional representation that minimizes the differences between the original distances and the distances in the reduced space. This focus on dissimilarities makes MDS particularly advantageous for clustering applications, as it can identify patterns and groupings based on the relationships between data points rather than solely relying on variance, as is the case with PCA.
 \\
 
 Similar to PCA, the resulting visualization in figure \ref{fig:mds} provides valuable insights into the relationship between samples, allowing for the identification of patterns and potential clustering of gene expression profiles during sporulation. Both techniques, PCA and MDS, are complementary and can provide similar information about the underlying structure of the data, assisting in the interpretation of results and the identification of relationships between variables.
@@ -304,9 +304,43 @@ In the Figure \ref{fig:violin_plots}, it is observed that some gene clusters are
 
 \subsection{Clustering comparation}
 
-In this section, we compare various clustering methods (k-means, agglomerative clustering, and Gaussian mixture models) along with different numbers of clusters. This comparison employs multiple validation techniques to provide a comprehensive understanding of how well these clustering methods perform on the dataset. Additionally, we evaluate our results against findings from relevant literature.
+In this section, we compare various clustering methods (k-means, agglomerative clustering, and Gaussian mixture models) along with different numbers of clusters. This comparison employs multiple validation techniques to provide a comprehensive understanding of how well these clustering methods perform on the dataset. 
 
 \begin{lstlisting}[style=mypython, caption=Violin Plots of Variables by Cluster, label=lst:violin]
+# Iterar sobre diferentes metodos y valores de k
+for method_name, method in methods.items():
+	for k in range(2, 15):  # Iniciar en 2 para que el Silhouette tenga sentido
+		if method_name == 'KMeans':
+		clusterer = method(n_clusters=k, random_state=42)
+		cluster_labels = clusterer.fit_predict(x)
+		centroids = clusterer.cluster_centers_
+		elif method_name == 'Agglomerative':
+		clusterer = method(n_clusters=k)
+		cluster_labels = clusterer.fit_predict(x)
+		centroids = None  # Agglomerative no tiene centroids
+		elif method_name == 'Gaussian Mixture':
+		clusterer = method(n_components=k, random_state=42)
+		cluster_labels = clusterer.fit_predict(x)
+		centroids = clusterer.means_
+		
+		# Silhouette Score
+		silhouette_avg = silhouette_score(x, cluster_labels)
+		
+		# Mean Distance to Centroids (solo para metodos con centros)
+		if centroids is not None:
+		mean_distance = np.mean(np.min(cdist(x, centroids), axis=1))
+		else:
+		mean_distance = np.nan
+		
+		# Average Distance Between Clusters
+		avg_distance = 0
+		for i in range(k):
+		for j in range(i + 1, k):
+		avg_distance += np.mean(cdist(x[cluster_labels == i], x[cluster_labels == j]))
+		avg_distance /= (k * (k - 1)) / 2  # Promedio total
+		
+		# Non-Overlap Measure
+		non_overlap = non_overlap_measure(cluster_labels)
 
 \end{lstlisting}
 
@@ -343,18 +377,114 @@ In this section, we compare various clustering methods (k-means, agglomerative c
 	\caption{Comparison of Clustering Methods}
 	\label{fig:clustering_methods}
 \end{figure}
- como se puede ver sale k=2 y los papers mechupan el pito
+
+After comparing the K-means, Gaussian Mixture, and Agglomerative Clustering methods, we observed that in all cases, the most appropriate number of clusters is k=2. The average distance between clusters was slightly better in our results, particularly at k=2, indicating better-defined cluster separation. Similarly, the mean distance to centroids also showed improved performance at k=2 in our analysis, further supporting that this value provides the most accurate and cohesive clustering solution for our data across all methods evaluated.
+ 
 \subsection{Silhouettes}
+To enhance our understanding of the clustering results, we will employ silhouette analysis, a technique that evaluates the quality of clustering solutions by measuring how similar an object is to its own cluster compared to other clusters. Each data point's silhouette value is derived from two distances: the average distance to points in its own cluster (\(a(i)\)) and the average distance to points in the nearest neighboring cluster (\(b(i)\)). The silhouette score \(s(i)\) ranges from -1 to +1, where a score close to +1 indicates well-clustered points, a score near 0 suggests points on the border between clusters, and a score close to -1 indicates misclassified points. 
+\\
 
-se ponen las graficas de las siluetas y se intenta cerrar
-\newpage
-poner codigo de algunas cosas
+Since the results obtained using the previous methods do not fully align with the findings reported in the literature, we will now apply the silhouette method to analyze our data. This approach will allow us to evaluate the consistency and quality of our clustering results in a more robust manner. By using the silhouette method, we aim to gain deeper insights into how well-separated our clusters are, as this metric considers both the cohesion within clusters and the separation between different clusters. This analysis should help us better understand the discrepancies between our findings and those reported in the original article, providing a more thorough validation of our results.
+\begin{lstlisting}[style=mypython, label=fig:pca_code,caption=Application of PCA method]
+	
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_samples, silhouette_score
+
+# Crear un rango de valores de k
+range_k = range(2, 11)
 
 
-imagenes y discusion con respecto a el paper
+for k in range_k:
+# Crear el modelo KMeans con el número de clusters k
+kmeans = KMeans(n_clusters=k, random_state=10)
+cluster_labels = kmeans.fit_predict(x)
 
-quedamos en que con nuestros datos el k=2 porque no tenemos los mismos datos que los demas. los del paper lo comparan con informacion externa que tiene mas sentido pero no es comparable con los datos de los otros ni nada.
+# Si k es 1, el silhouette score no se puede calcular
+if k == 1:
+print(f"K = {k}: El silhouette score no es aplicable.")
+continue
 
+# Calcular el promedio del silhouette score para todos los puntos
+silhouette_avg = silhouette_score(x, cluster_labels)
+print(f"K = {k}: Silhouette score promedio = {silhouette_avg:.3f}")
+
+# Calcular los valores de silueta para cada punto
+sample_silhouette_values = silhouette_samples(x, cluster_labels)
+
+# Crear el gráfico de siluetas
+fig, ax1 = plt.subplots(1, 1)
+fig.set_size_inches(7, 5)
+
+y_lower = 10
+for i in range(k):
+# Agregar los valores de silueta para los clusters en orden
+ith_cluster_silhouette_values = sample_silhouette_values[cluster_labels == i]
+ith_cluster_silhouette_values.sort()
+
+size_cluster_i = ith_cluster_silhouette_values.shape[0]
+y_upper = y_lower + size_cluster_i
+
+ax1.fill_betweenx(np.arange(y_lower, y_upper),
+0, ith_cluster_silhouette_values)
+
+y_lower = y_upper + 10  # Espacio entre clusters
+
+# Dibujar la línea del umbral del silhouette score promedio
+ax1.axvline(x=silhouette_avg, color="red", linestyle="--")
+
+ax1.set_title(f"Gráfica de siluetas para k = {k}")
+ax1.set_xlabel("Coeficiente de silueta")
+ax1.set_ylabel("Etiqueta del cluster")
+
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[H]
+	\centering
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/sil_2.png}
+		\caption{Silhouette Score k=2, average: 0.57}
+		\label{fig:sil2}
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/sil_3.png}
+		\caption{Silhouette Score k=3, average: 0.5}
+		\label{fig:sil3}
+	\end{minipage}
+	
+	\vspace{0.5cm} % Espacio vertical entre filas
+	
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/sil_4.png}
+		\caption{Silhouette Score k=4, average: 0.46}
+		\label{fig:sil4}
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/sil_5.png}
+		\caption{Silhouette Score k=5, average: 0.43}
+		\label{fig:sil5}
+	\end{minipage}
+	
+	\caption{Comparison of silhouettes}
+	\label{fig:clustering_methods}
+\end{figure}
+Once again, the results obtained reinforce the previous findings. This consistency across the analyses strengthens our confidence in the validity of our conclusions and highlights the robustness of our clustering approach. The alignment of results across different methods further emphasizes the reliability of our chosen clustering solution for our dataset.
+
+
+
+
+\section{Conclusion}
+The results we obtained suggest that the optimal value of k for our dataset is k=2. However, this finding contrasts with the conclusions drawn in previous studies, where k=7 is consistently reported as the most appropriate value. This discrepancy might be explained by the fact that our dataset and experimental conditions differ from those used in the literature. 
+The study likely achieves its results by relying on external data sources that support the notion of classifying the data into seven distinct groups. This external validation may lead the researchers to aim for a clustering solution that aligns with this predetermined value. Furthermore, considering that the paper is over 22 years old, it is possible that the methodologies and datasets used may not reflect current standards or advancements in clustering techniques, which could contribute to the observed differences in outcomes between their findings and our analysis.
+\\
+
+Despite this divergence, the evidence strongly suggests that k=2 is the most suitable choice for our data, considering the information at our disposal. This conclusion is substantiated by several factors, including the results from principal component analysis (PCA) and multidimensional scaling (MDS) visualizations, which clearly indicate a natural grouping around two clusters. Additionally, the metrics obtained for all clusters further reinforce this finding, particularly when evaluating clustering quality through methods such as silhouette analysis, which consistently points to k=2 as the most appropriate value for our dataset.
 \newpage
 \section{Acceso al Repositorio}
 

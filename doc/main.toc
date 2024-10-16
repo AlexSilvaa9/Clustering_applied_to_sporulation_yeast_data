@@ -6,5 +6,6 @@
 \contentsline {subsection}{\numberline {3.2}Data visualization}{3}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}First aproach to clustering}{5}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}Clustering comparation}{7}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Silhouettes}{8}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Acceso al Repositorio}{10}{section.4}%
+\contentsline {subsection}{\numberline {3.5}Silhouettes}{9}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Conclusion}{11}{section.4}%
+\contentsline {section}{\numberline {5}Acceso al Repositorio}{12}{section.5}%
