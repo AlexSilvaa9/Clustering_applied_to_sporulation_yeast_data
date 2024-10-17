@@ -381,7 +381,7 @@ for method_name, method in methods.items():
 After comparing the K-means, Gaussian Mixture, and Agglomerative Clustering methods, we observed that in all cases, the most appropriate number of clusters is k=2. The average distance between clusters was slightly better in our results, particularly at k=2, indicating better-defined cluster separation. Similarly, the mean distance to centroids also showed improved performance at k=2 in our analysis, further supporting that this value provides the most accurate and cohesive clustering solution for our data across all methods evaluated.
  
 \subsection{Silhouettes}
-To enhance our understanding of the clustering results, we will employ silhouette analysis, a technique that evaluates the quality of clustering solutions by measuring how similar an object is to its own cluster compared to other clusters. Each data point's silhouette value is derived from two distances: the average distance to points in its own cluster (\(a(i)\)) and the average distance to points in the nearest neighboring cluster (\(b(i)\)). The silhouette score \(s(i)\) ranges from -1 to +1, where a score close to +1 indicates well-clustered points, a score near 0 suggests points on the border between clusters, and a score close to -1 indicates misclassified points. 
+To enhance our understanding of the clustering results, we will employ silhouette analysis, a technique that evaluates the quality of clustering solutions by measuring how similar an object is to its own cluster compared to other clusters \cite{rousseeuw1987silhouettes}. Each data point's silhouette value is derived from two distances: the average distance to points in its own cluster (\(a(i)\)) and the average distance to points in the nearest neighboring cluster (\(b(i)\)). The silhouette score \(s(i)\) ranges from -1 to +1, where a score close to +1 indicates well-clustered points, a score near 0 suggests points on the border between clusters, and a score close to -1 indicates misclassified points. 
 \\
 
 Since the results obtained using the previous methods do not fully align with the findings reported in the literature, we will now apply the silhouette method to analyze our data. This approach will allow us to evaluate the consistency and quality of our clustering results in a more robust manner. By using the silhouette method, we aim to gain deeper insights into how well-separated our clusters are, as this metric considers both the cohesion within clusters and the separation between different clusters. This analysis should help us better understand the discrepancies between our findings and those reported in the original article, providing a more thorough validation of our results.
@@ -485,11 +485,12 @@ The study likely achieves its results by relying on external data sources that s
 \\
 
 Despite this divergence, the evidence strongly suggests that k=2 is the most suitable choice for our data, considering the information at our disposal. This conclusion is substantiated by several factors, including the results from principal component analysis (PCA) and multidimensional scaling (MDS) visualizations, which clearly indicate a natural grouping around two clusters. Additionally, the metrics obtained for all clusters further reinforce this finding, particularly when evaluating clustering quality through methods such as silhouette analysis, which consistently points to k=2 as the most appropriate value for our dataset.
-\newpage
-\section{Acceso al Repositorio}
 
 
-Toda la información adicional, incluyendo el código fuente y la documentación completa de este proyecto, está disponible en el repositorio de GitHub \cite{silva2024github}.
+\section{Repository Access}
+
+All additional information, including the source code and full documentation of this project, is available in the GitHub repository \cite{silva2024github}.
+
 
 % Incluir la bibliografía
 \bibliographystyle{plain}  % Estilo de la bibliografía (por ejemplo, plain, alpha, ieee, etc.)

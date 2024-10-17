@@ -8,6 +8,13 @@ Susmita Datta and Somnath Datta.
 \newblock Received on May 30, 2002; revised on October 18, 2002; accepted on
   October 21, 2002.
 
+\bibitem{rousseeuw1987silhouettes}
+Peter~J Rousseeuw.
+\newblock Silhouettes: a graphical aid to the interpretation and validation of
+  cluster analysis.
+\newblock {\em Journal of Computational and Applied Mathematics}, 20:53--65,
+  1987.
+
 \bibitem{silva2024github}
 Alex Silva.
 \newblock Clustering\_applied\_to\_sporulation\_yeast\_data.
