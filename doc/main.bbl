@@ -1,9 +1,18 @@
 \begin{thebibliography}{1}
 
+\bibitem{Datta2003}
+Susmita Datta and Somnath Datta.
+\newblock Comparisons and validation of statistical clustering techniques for
+  microarray gene expression data.
+\newblock {\em Bioinformatics}, 19(4):459--466, 2003.
+\newblock Received on May 30, 2002; revised on October 18, 2002; accepted on
+  October 21, 2002.
+
 \bibitem{silva2024github}
 Alex Silva.
-\newblock Practica1\_almacenes\_de\_datos.
-\newblock \url{https://github.com/AlexSilvaa9/Practica1\_almacenes\_de\_datos},
+\newblock Clustering\_applied\_to\_sporulation\_yeast\_data.
+\newblock
+  \url{https://github.com/AlexSilvaa9/Clustering\_applied\_to\_sporulation\_yeast\_data},
   2024.
 \newblock Último acceso: 1 octubre 2024.
 
